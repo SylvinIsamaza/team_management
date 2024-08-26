@@ -1,0 +1,1366 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Football Team Management API",
+    "version": "1.0.0",
+    "description": "API documentation for Football Team Management System"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/api",
+      "description": "Development server"
+    },
+    {
+      "url": "https://team-management-fms3.onrender.com/api",
+      "description": "Production server"
+    }
+    
+  ],
+  "paths": {
+    "/team/upload-jerseys": {
+      "post": {
+        "summary": "Upload jerseys for the team",
+        "tags": ["Team"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "teamId": {
+                    "type": "string",
+                    "description": "ID of the team"
+                  },
+                  "home": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Home jersey file"
+                  },
+                  "away": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Away jersey file"
+                  },
+                  "third": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Third kit jersey file"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Jerseys uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login a user (Super Admin or Manager)",
+        "tags": ["Authentication"],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, missing required fields"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/admin/create-admin": {
+      "post": {
+        "summary": "Create a new Super Admin",
+        "tags": ["Super Admin"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSuperAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Super Admin created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperAdmin"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, missing required fields"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/admin/register-manager": {
+      "post": {
+        "summary": "Create a new Super Admin",
+        "tags": ["Super Admin"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createTeamAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Super Admin created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Manager"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, missing required fields"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+ 
+    "/team/select-jersey-number": {
+      "put": {
+        "summary": "Select a jersey number for a player",
+        "tags": ["Team"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelectJerseyNumberRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Jersey number selected successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team/request-transfer": {
+      "post": {
+        "summary": "Request player transfer",
+        "tags": ["Team"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlayerTransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transfer request submitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transfer request submitted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team/add-official": {
+      "post": {
+        "summary": "Add an official to the team",
+        "tags": ["Team"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddOfficialRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Official added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Official"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team/add-logo": {
+      "post": {
+        "summary": "Upload logo for the team",
+        "tags": ["Team"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "teamId": {
+                    "type": "string",
+                    "description": "ID of the team"
+                  },
+                  "logo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Logo file"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logo uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team/select-squad": {
+      "post": {
+        "summary": "Select squad for a tournament",
+        "tags": ["Team"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelectSquadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Squad selected successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Squad selected for tournament"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team/{id}": {
+      "get": {
+        "summary": "Get team details",
+        "tags": ["Team"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Team details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Team not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tournament/new": {
+      "post": {
+        "summary": "Create a new tournament",
+        "tags": ["Super Admin"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTournament"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tournament created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tournament"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tournament/add-teams": {
+      "post": {
+        "summary": "Add teams to a tournament",
+        "tags": ["Super Admin"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTeamsToTournamentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Teams added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tournament"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tournament/allocate-teams": {
+      "post": {
+        "summary": "Allocate teams to groups in a tournament",
+        "tags": ["Super Admin"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AllocateTeamsToGroupsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Teams allocated to groups successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tournament"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tournament/create-knockout-stages": {
+      "post": {
+        "summary": "Create knockout stages for a tournament",
+        "tags": ["Super Admin"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKnockoutStagesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Knockout stages created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tournament"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tournament/{id}": {
+      "get": {
+        "summary": "Get details of a tournament",
+        "tags": ["Tournament"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tournament details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tournament"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tournament not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team/new": {
+      "post": {
+        "summary": "Create a new team and assign manager",
+        "tags": ["Super Admin"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTeamRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Team created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/admin/verify-payment": {
+      "post": {
+        "summary": "Verify payment transfer slips/receipts",
+        "tags": ["Super Admin"],
+        "security": {
+          "cookieAuth": []
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyPaymentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Payment verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/team": {
+      "get": {
+        "summary": "Get all teams",
+        "tags": ["Team"],
+        "responses": {
+          "200": {
+            "description": "List of all teams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Team"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tournament": {
+      "get": {
+        "summary": "Get all tournaments",
+        "tags": ["Tournament"],
+        "responses": {
+          "200": {
+            "description": "List of all tournaments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tournament"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "securitySchemes": {
+        "cookieAuth": {
+          "type": "apiKey",
+          "in": "cookie",
+          "name": "token"
+        }
+      },
+      "Player": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the player"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the player"
+          },
+          "jerseyNumber": {
+            "type": "integer",
+            "description": "Jersey number of the player"
+          }
+        }
+      },
+      "Official": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+1234567890"
+          },
+          "description": {
+            "type": "string",
+            "example": "Team official description"
+          },
+          
+          "position": {
+            "type": "string",
+            "enum": [
+              "Owners",
+              "Board of Director",
+              "President/Chairman",
+              "Chief Executive Officer",
+              "Sporting Director",
+              "Head Coach/Manager",
+              "Assistant Coach",
+              "Fitness Coach",
+              "Condition Coach",
+              "Team Doctor",
+              "Equipment Manager",
+              "Chief Financial Officer",
+              "Event Coordinator",
+              "Scouts",
+              "Analyst",
+              "Equipment Manager",
+              "Nutritionist",
+              "Goalkeeper",
+              "Right Back",
+              "Left Back",
+              "Center Back",
+              "Defensive Midfielder",
+              "Central Midfielder",
+              "Right Midfielder",
+              "Left Midfielder",
+              "Attacking Midfielder",
+              "Forward/Striker"
+            ],
+            "example": "Head Coach/Manager"
+          },
+          "preferredFoot": {
+            "type": "string",
+            "example": "Right"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1980-01-01"
+          },
+          "nationality": {
+            "type": "string",
+            "example": "American"
+          }
+        },
+        "required": ["fullName", "email", "phone", "position"],
+        "additionalProperties": false
+      },
+      "Tournament": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the tournament"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the tournament"
+          },
+          "sponsors": {
+            "type": "string",
+            "description": "Title sponsors of the tournament"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Start date of the tournament"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "description": "End date of the tournament"
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Team"
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "groupName": {
+                  "type": "string",
+                  "description": "Name of the group"
+                },
+                "teamIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "ID of the teams in the group"
+                  }
+                }
+              }
+            }
+          },
+          "knockoutStages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stageName": {
+                  "type": "string",
+                  "description": "Name of the knockout stage"
+                },
+                "matches": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Match"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateTournament": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the tournament"
+          },
+          "sponsors": {
+            "type": "string",
+            "description": "Title sponsors of the tournament"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Start date of the tournament"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "description": "End date of the tournament"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["Knockout", "League", "Group and Knockout"],
+            "description": "Tournament type"
+          }
+        }
+      },
+      "Match": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the match"
+          },
+          "homeTeam": {
+            "type": "string",
+            "description": "ID of the home team"
+          },
+          "awayTeam": {
+            "type": "string",
+            "description": "ID of the away team"
+          },
+          "homeTeamScore": {
+            "type": "integer",
+            "description": "Score of the home team"
+          },
+          "awayTeamScore": {
+            "type": "integer",
+            "description": "Score of the away team"
+          }
+        }
+      },
+      "AddPlayerRequest": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string",
+            "description": "ID of the team"
+          },
+          "playerData": {
+            "$ref": "#/components/schemas/Player"
+          }
+        }
+      },
+      "SelectJerseyNumberRequest": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "description": "ID of the player"
+          },
+          "jerseyNumber": {
+            "type": "integer",
+            "description": "Jersey number to assign"
+          }
+        }
+      },
+      "PlayerTransferRequest": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "description": "ID of the player requesting transfer"
+          },
+          "transferFee": {
+            "type": "number",
+            "description": "Transfer Fee"
+          },
+          "toTeamId": {
+            "type": "string",
+            "description": "ID of the team requesting the transfer"
+          }
+        }
+      },
+      "AddOfficialRequest": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string",
+            "description": "ID of the team"
+          },
+          "officialData": {
+            "type":"array",
+            "items":{
+              "$ref": "#/components/schemas/Official"
+
+            }
+          }
+        }
+      },
+     "SelectSquadRequest": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string",
+            "description": "ID of the team"
+          },
+          "squad": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tournamentId": {
+                  "type": "string",
+                  "description": "ID of the tournament"
+                },
+                "member": {
+                  "type": "array",
+                  "items": {
+                   "teamId": {
+            "type": "string",
+            "description": "Members Id"
+          }
+                  }
+                }
+              },
+              "required": ["tournamentId", "member"]
+            }
+          }
+        }
+      },
+      "Team": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the team"
+          },
+          "teamName": {
+            "type": "string",
+            "description": "Name of the team"
+          },
+          "logo": {
+            "type": "string",
+            "description": "URL of the team's logo"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the team"
+          },
+          "foundedYear": {
+            "type": "number",
+            "description": "Year the team was founded"
+          },
+          "stadium": {
+            "type": "string",
+            "description": "Name of the team's stadium"
+          },
+          "jerseys": {
+            "type": "object",
+            "properties": {
+              "home": {
+                "type": "string",
+                "description": "URL of the home jersey"
+              },
+              "away": {
+                "type": "string",
+                "description": "URL of the away jersey"
+              },
+              "third": {
+                "type": "string",
+                "description": "URL of the third jersey"
+              }
+            }
+          },
+          "paymentVerified": {
+            "type": "boolean",
+            "description": "Status of payment verification"
+          },
+          "paymentReceipt": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "ID of the payment receipt",
+              "example": "ObjectId"
+            }
+          },
+          "managerId": {
+            "type": "string",
+            "description": "ID of the manager",
+            "example": "ObjectId"
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "ID of the player",
+              "example": "ObjectId"
+            }
+          },
+          "officials": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "ID of the official",
+              "example": "ObjectId"
+            }
+          }
+        },
+        "required": ["teamName"]
+      },
+
+      "CreateTeamRequest": {
+        "type": "object",
+        "properties": {
+          "teamName": {
+            "type": "string",
+            "description": "Name of the team"
+          },
+          "logo": {
+            "type": "string",
+            "format": "binary",
+            "description": "Team logo image"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the team"
+          },
+          "foundedYear": {
+            "type": "number",
+            "description": "Year the team was founded"
+          },
+          "stadium": {
+            "type": "string",
+            "description": "Name of the team's stadium"
+          },
+          "home": {
+            "type": "string",
+            "format": "binary",
+            "description": "Home jersey image file"
+          },
+          "away": {
+            "type": "string",
+            "format": "binary",
+            "description": "Away jersey image file"
+          },
+          "third": {
+            "type": "string",
+            "format": "binary",
+            "description": "Third jersey image file"
+          },
+
+         
+          "managerId": {
+            "type": "string",
+            "description": "ID of the manager",
+            "example": "ObjectId"
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "ID of the player",
+              "example": "ObjectId"
+            }
+          },
+          "officials": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "ID of the official",
+              "example": null
+            }
+          }
+        },
+        "required": ["teamName"]
+      },
+      "VerifyPaymentRequest": {
+        "type": "object",
+        "properties": {
+          "paymentSlip": {
+            "type": "string",
+            "description": "Payment transfer slip or receipt"
+          },
+          "teamId": {
+            "type": "string",
+            "description": "ID of the team making the payment"
+          }
+        }
+      },
+      "AddTeamsToTournamentRequest": {
+        "type": "object",
+        "properties": {
+          "tournamentId": {
+            "type": "string",
+            "description": "ID of the tournament"
+          },
+          "teamIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "IDs of the teams to add"
+            }
+          }
+        }
+      },
+      "AllocateTeamsToGroupsRequest": {
+        "type": "object",
+        "properties": {
+          "tournamentId": {
+            "type": "string",
+            "description": "ID of the tournament"
+          },
+          "groupAllocations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "groupName": {
+                  "type": "string",
+                  "description": "Name of the group"
+                },
+                "teamIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "IDs of the teams in the group"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateKnockoutStagesRequest": {
+        "type": "object",
+        "properties": {
+          "tournamentId": {
+            "type": "string",
+            "description": "ID of the tournament"
+          },
+          "knockoutStages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stageName": {
+                  "type": "string",
+                  "description": "Name of the knockout stage"
+                },
+                "matches": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Match"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateSuperAdminRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the Super Admin"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the Super Admin"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password for the Super Admin account"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number for the Super Admin account"
+          }
+        }
+      },
+      "SuperAdmin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the Super Admin"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the Super Admin"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the Super Admin"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number for the Super Admin account"
+          }
+        }
+      },
+      "Manager": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the Team Admin"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the Team Admin"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number"
+          }
+        }
+      },
+      "createTeamAdminRequest": {
+        "type": "object",
+        "required": ["name", "email", "phone", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the Team Admin"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Name of the Team Admin"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the Team Admin"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password for the Team Admin account"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password", "role"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address of the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password of the user"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["superadmin", "manager"],
+            "description": "Type of the user (superadmin or manager)"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "JWT token for authentication"
+          },
+          "userId": {
+            "type": "string",
+            "description": "ID of the logged-in user"
+          },
+          "role": {
+            "type": "string",
+            "description": "Type of the logged-in user"
+          }
+        }
+      }
+    }
+  }
+}

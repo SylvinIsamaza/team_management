@@ -1,0 +1,32 @@
+import mongoose from "mongoose";
+
+const transferSchema = new mongoose.Schema(
+  {
+    playerID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "officials",
+      required: true,
+    },
+    fromTeamID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Team",
+      required: true,
+    },
+    toTeamID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Team",
+      required: true,
+    },
+    transferDate: { type: Date, default: Date.now },
+    transferFee: { type: Number, required: true },
+    status: {
+      type: String,
+      enum: ["Confirmed", "Pending","Rejected"],
+      default:"Pending"
+    },
+  },
+  { timestamps: true }
+);
+
+const Transfer = mongoose.model("Transfer", transferSchema);
+export default Transfer;
