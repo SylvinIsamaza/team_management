@@ -31,7 +31,7 @@ const tournamentSchema = new mongoose.Schema(
       }]
 
     }],
-    sponsors: [{ type: String, required: true }],
+    sponsors: { type: String},
     teams: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Team' }],
 
     recordedBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
@@ -43,6 +43,8 @@ const tournamentSchema = new mongoose.Schema(
       }
    
     ],
+    startDate: { type: Date, default: Date.now },
+    endDate: { type: Date },
     status: {
       type: String,
       enum: [

@@ -208,7 +208,7 @@ export const createManager = async (req, res,next) => {
     await newManager.save();
     res
       .status(201)
-      .json({ message: "Manager created successfully", manager: newManager });
+      .json({ message: "Manager created successfully",success:true, manager: newManager });
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: "Internal server error", error });
