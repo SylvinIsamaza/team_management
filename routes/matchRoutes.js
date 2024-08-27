@@ -12,19 +12,19 @@ router.post("/", protect, authorize("superAdmin"), createMatch);
 router.put(
   "/update-score",
   protect,
-  authorize("superAdmin", "teamManager"),
+  authorize("superAdmin", "manager"),
   updateMatchScore
 );
 router.post(
   "/statistics",
   protect,
-  authorize("teamManager"),
+  authorize("manager"),
   recordMatchStatistics
 );
 router.get(
   "/statistics/:matchId",
   protect,
-  authorize("teamManager", "superAdmin"),
+  authorize("manager", "superAdmin"),
   getMatchStatistics
 );
 

@@ -73,18 +73,14 @@ export const login = async (req, res) => {
 };
 export const getUserInfo = async (req, res) => {
   try {
-    let user;
-    if (req.user.role === 'superadmin') {
-      user = await User.findById(req.user.id);
-    } else if (role === 'manager') {
-      user = await User.findById(req.user.id);;
-      console.log(user)
-    }
+    let user = await User.findById(req.user.id).select('-password -__v -resetPasswordLink');
+    console.log(req.user)
+    console.log(user)
     if (!user) {
       return res.status(401).json({success:true, message: 'Not authorized' });
     }
    
-    res.status(200).json({user});
+    res.status(200).json({success:true,user});
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Internal server error', error });

@@ -14,7 +14,6 @@
       "url": "https://team-management-fms3.onrender.com/api",
       "description": "Production server"
     }
-    
   ],
   "paths": {
     "/team/upload-jerseys": {
@@ -185,7 +184,7 @@
         }
       }
     },
- 
+
     "/team/select-jersey-number": {
       "put": {
         "summary": "Select a jersey number for a player",
@@ -290,6 +289,30 @@
           },
           "500": {
             "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth": {
+      "get": {
+        "summary": "Authenticate user",
+        "tags": ["Authentication"],
+        "security": {
+          "cookieAuth": []
+        },
+        "responses": {
+          "200": {
+            "description": "Authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Manager"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
@@ -746,7 +769,7 @@
             "type": "string",
             "example": "Team official description"
           },
-          
+
           "position": {
             "type": "string",
             "enum": [
@@ -970,15 +993,14 @@
             "description": "ID of the team"
           },
           "officialData": {
-            "type":"array",
-            "items":{
+            "type": "array",
+            "items": {
               "$ref": "#/components/schemas/Official"
-
             }
           }
         }
       },
-     "SelectSquadRequest": {
+      "SelectSquadRequest": {
         "type": "object",
         "properties": {
           "teamId": {
@@ -997,10 +1019,10 @@
                 "member": {
                   "type": "array",
                   "items": {
-                   "teamId": {
-            "type": "string",
-            "description": "Members Id"
-          }
+                    "teamId": {
+                      "type": "string",
+                      "description": "Members Id"
+                    }
                   }
                 }
               },
@@ -1130,7 +1152,6 @@
             "description": "Third jersey image file"
           },
 
-         
           "managerId": {
             "type": "string",
             "description": "ID of the manager",

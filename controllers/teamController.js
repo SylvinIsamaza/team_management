@@ -190,6 +190,30 @@ export const getTeamDetails = async (req, res,next) => {
   }
 };
 
+export const deleteTeam = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const team = await Team.findById(id);
+    if (!team) return res.status(404).json({ message: 'Team not found' });
+    await Team.findByIdAndDelete(id);
+    res.status(200).json({success:true,message:"Team Deleted Successfully" });  
+  } catch (error) {
+    next(error);
+  }
+  
+  
+}
+export const updateTeam = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const team = await Team.findById(id);
+    if (!team) return res.status(404).json({ message: 'Team not found' });
+    team = await Team.findByIdAndUpdate(id, req.body);
+    res.status(200).json({success:true,message:"Team Successfully updated",team });  
+  } catch (error) {
+    next(error);
+  }
+}
 export const getAllTeams = async (req, res,next) => {
   try {
     const teams = await Team.find()

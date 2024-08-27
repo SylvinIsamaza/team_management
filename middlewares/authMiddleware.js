@@ -19,7 +19,7 @@ export const protect = async (req, res, next) => {
       
       let user = await User.findById(decoded.id)
       if (user != null) {
-        req.user = { ...user, role: decoded.role }
+        req.user = user
         next();
       }
       else {
