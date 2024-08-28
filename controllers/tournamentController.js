@@ -126,22 +126,37 @@ export const updateMatchData = async (req, res, next) => {
 export const getAllTournaments = async (req, res, next) => {
   try {
     const tournaments = await Tournament.find();
+    const filteredTournaments = await Promise.all(
+      tournaments.map(async (tournament) => {
+        let allTeamsInTournament=[] 
+        const teams = await Promise.all(
+          tournament.teams.map(async (teamId) => {
+            const teamInTournament = await Team.findById(teamId).select('-__v -paymentReceipt -officials -v -createdAt -updatedAt -squads ');
+            allTeamsInTournament.push(teamInTournament)
+          })
+        );
+       
+        tournament.teams=allTeamsInTournament
+        return tournament;
+      })
+    );
     res.status(200).json({
       success: true,
-      data: tournaments,
+      data: filteredTournaments,
     });
   } catch (error) {
     next(error);
   }
 };
 
+
 export const getTournamentDetails = async (req, res, next) => {
   const { id } = req.params;
   console.log(id);
   try {
-    const tournaments = await Tournament.findById(id);
+    const tournament = await Tournament.findById(id);
 
-    res.status(200).json(tournaments);
+    res.status(200).json({ tournament,success:true });
   } catch (error) {
     next(error);
   }

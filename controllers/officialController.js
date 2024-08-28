@@ -1,4 +1,6 @@
 import Officials from '../models/officials.js';
+import Team from '../models/team.js';
+import User from '../models/user.js';
 
 // Create a new official
 export const createOfficial = async (req, res) => {
@@ -82,5 +84,29 @@ export const getPlayers = async (req, res) => {
     } catch (error) {
       console.log(error)
         res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+
+export const getAllManagers = async (req, res, next) => {
+    try {
+        const managers = await User.find({ role: "manager" }).select("-__v -resetPasswordLink -createdAt -updatedAt");
+
+        const allManagers = await Promise.all(
+            managers.map(async (manager) => {
+               
+                const team = await Team.findById(manager.teamID).select("-__v -officials -createdAt -updatedAt -paymentReceipt");
+                
+                return {
+                    ...manager._doc, 
+                    team,            
+                };
+            })
+        );
+
+        
+        res.json({success:true,managers:allManagers});
+    } catch (error) {
+        next(error);
     }
 };

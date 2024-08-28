@@ -29,7 +29,7 @@ export const createSuperAdmin = async (req, res,next) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
     
-    const newSuperAdmin = new User({ name, email, password:hashedPassword ,phone,role:"superadmin"});
+    const newSuperAdmin = new User({ name, email, password:hashedPassword ,phone,role:"superadmin",status:"Approved"});
     await newSuperAdmin.save();
     
     

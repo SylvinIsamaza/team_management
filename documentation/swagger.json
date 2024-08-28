@@ -436,6 +436,28 @@
         }
       }
     },
+    "/officials/managers": {
+      "get": {
+        "summary": "Get team details",
+        "tags": ["Team"],
+        
+        "responses": {
+          "200": {
+            "description": "Team Manager retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/tournament/new": {
       "post": {
         "summary": "Create a new tournament",

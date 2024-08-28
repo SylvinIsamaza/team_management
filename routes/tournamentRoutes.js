@@ -7,6 +7,8 @@ import {
   updateMatchData,
   getTournamentDetails,
   getAllTournaments,
+  updateTournament,
+  deleteTournamentById,
 } from "../controllers/tournamentController.js";
 import { protect, authorize } from "../middlewares/authMiddleware.js  ";
 
@@ -39,5 +41,7 @@ router.put(
   updateMatchData
 );
 router.get("/:id", getTournamentDetails);
+router.put("/:id", protect, authorize("superadmin"), updateTournament);
+router.delete("/:id",protect,authorize("superadmin"), deleteTournamentById);
 
 export default router;

@@ -17,6 +17,14 @@ const userSchema = new Schema(
         "manager"
       ]
     },
+    status: {
+      type: String,
+      enum: [
+        "Approved",
+        "Request Approval"
+      ],
+      default:"Request Approval"
+    },
     password: {
       type: String,
     },
