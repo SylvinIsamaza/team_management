@@ -88,25 +88,3 @@ export const getPlayers = async (req, res) => {
 };
 
 
-export const getAllManagers = async (req, res, next) => {
-    try {
-        const managers = await User.find({ role: "manager" }).select("-__v -resetPasswordLink -createdAt -updatedAt");
-
-        const allManagers = await Promise.all(
-            managers.map(async (manager) => {
-               
-                const team = await Team.findById(manager.teamID).select("-__v -officials -createdAt -updatedAt -paymentReceipt");
-                
-                return {
-                    ...manager._doc, 
-                    team,            
-                };
-            })
-        );
-
-        
-        res.json({success:true,managers:allManagers});
-    } catch (error) {
-        next(error);
-    }
-};

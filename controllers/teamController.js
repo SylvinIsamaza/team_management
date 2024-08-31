@@ -252,6 +252,7 @@ export const getAllManagers = async (req, res,next) => {
   }
 };
 
+
 // Verify payment transfer slips / receipts
 export const verifyPayment = async (req, res,next) => {
   const { teamId, paymentReceipt } = req.body;

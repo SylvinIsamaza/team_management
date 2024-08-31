@@ -18,10 +18,9 @@ const transferSchema = new mongoose.Schema(
       required: true,
     },
     transferDate: { type: Date, default: Date.now },
-    transferFee: { type: Number, required: true },
     status: {
       type: String,
-      enum: ["Confirmed", "Pending","Rejected"],
+      enum: ["Completed", "Pending","Rejected"],
       default:"Pending"
     },
   },

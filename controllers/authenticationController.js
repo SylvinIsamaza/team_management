@@ -51,7 +51,7 @@ export const login = async (req, res) => {
 
     let user;
    
-    user = await User.findOne({ email });
+    user = await User.findOne({ email }).select('-resetPasswordLink -__v');
     console.log(user)
     if (!user) {
       return res.status(401).json({success:false, message: 'Invalid Email or password' });
@@ -65,7 +65,7 @@ export const login = async (req, res) => {
       expiresIn: '1d',
     });
     res.cookie("token",token)
-    res.status(200).json({success:true, token, userId: user._id, role:user.role });
+    res.status(200).json({success:true, token,user:user, role:user.role });
   } catch (error) {
     console.log(error)
     res.status(500).json({success:false, message: 'Internal server error', error });
@@ -74,8 +74,7 @@ export const login = async (req, res) => {
 export const getUserInfo = async (req, res) => {
   try {
     let user = await User.findById(req.user.id).select('-password -__v -resetPasswordLink');
-    console.log(req.user)
-    console.log(user)
+    
     if (!user) {
       return res.status(401).json({success:true, message: 'Not authorized' });
     }
@@ -86,6 +85,52 @@ export const getUserInfo = async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error });
   }
 };
+
+export const updateAdmin = async (req, res) => {
+  const { email, name, password } = req.body;
+  console.log(req.body)
+  try {
+    let user = await User.findById(req.user.id).select('-password -__v -resetPasswordLink');
+    console.log(user);
+    
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'User not found' });
+    }
+
+    const updateData = { name, email };
+    if (password && password.trim() !== '') {
+      const hashedPassword = await hash(password, 10);
+      updateData.password = hashedPassword;
+    }
+    await User.findByIdAndUpdate(req.user.id, updateData, { new: true });
+    const updatedUser = await User.findById(req.user.id);
+    
+    res.status(200).json({ success: true, user: updatedUser, message: "Successfully updated admin info" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error', error });
+  }
+};
+
+export const updateAdminById = async (req, res) => {
+  const id=req.params.id
+  try {
+    let user = await User.findById(id).select('-password -__v -resetPasswordLink');
+    
+    
+    if (!user) {
+      return res.status(401).json({success:true, message: 'Not authorized' });
+    }
+    let updatedUser = await User.findByIdAndUpdate(id, req.body)
+    
+    res.status(200).json({success:true,user:updatedUser,message:"Successfully updated admin info"});
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Internal server error', error });
+  }
+};
+
+
 
 
 

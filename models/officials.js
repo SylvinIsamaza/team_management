@@ -44,6 +44,10 @@ const officialsSchema = new mongoose.Schema({
   preferredFoot: { type: String },
   dateOfBirth: { type: Date },
   nationality: { type: String },
+  status: {
+    type: String,
+    enum:["Good Performance","Injury"]
+  }
  
 }, { timestamps: true });
 

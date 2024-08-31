@@ -6,17 +6,22 @@ import {
     updateOfficial,
     deleteOfficial,
     getPlayers,
-    getAllManagers,
+    
 } from '../controllers/officialController.js';
+import { createOfficialUpdate, deleteOfficialUpdateById, getAllOfficialUpdate, updateOfficialUpdateById } from '../controllers/officialupdateController.js';
 
 const router = express.Router();
 
 router.post('/new', createOfficial);
 router.get('/players', getPlayers);
+router.get("/update", getAllOfficialUpdate)
+router.post("/update/new", createOfficialUpdate)
+router.delete("/update/:id", deleteOfficialUpdateById)
+router.put("/update/:id",updateOfficialUpdateById)
 router.get('/', getAllOfficials);
-router.get("/managers",getAllManagers)
 router.get('/:id', getOfficialById);
 router.put('/:id', updateOfficial);
-router.delete('/:id', deleteOfficial); 
+router.delete('/:id', deleteOfficial);
+
 
 export default router;

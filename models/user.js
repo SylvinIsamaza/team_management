@@ -10,6 +10,9 @@ const userSchema = new Schema(
     resetPasswordLink: {
       data: { type: String, default: "" },
     },
+    avatar: {
+      type:String
+    },
     role: {
       type: String,
       enum: [
