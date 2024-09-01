@@ -31,7 +31,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', , 'Access-Control-Allow-Credentials', 'Access-Control-Allow-Origin'],
   credentials: true,
 };
-console.log(FRONTEND_URL)
+console.log(process.env.FRONTEND_URL)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors(corsOptions));              
