@@ -9,7 +9,14 @@ export const getAllNews = async (req, res, next) => {
 };
 export const createNews = async (req, res, next) => {
   try {
+
+    const file = req.file;
+    console.log(req.body)
+    console.log(file)
+  const fileName =file? file.filename:"";
     const news = new News(req.body);
+    news.coverImage = fileName;
+    
     
     await news.save();
       res.json({success:true,news});

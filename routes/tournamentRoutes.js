@@ -10,7 +10,7 @@ import {
   updateTournament,
   deleteTournamentById,
 } from "../controllers/tournamentController.js";
-import { protect, authorize } from "../middlewares/authMiddleware.js  ";
+import { protect, authorize } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 

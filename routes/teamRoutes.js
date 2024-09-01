@@ -65,11 +65,7 @@ router.post(
   "/new",
   protect,
   authorize("superadmin"),
-  upload.fields([
-    { name: "home", maxCount: 1 },
-    { name: "away", maxCount: 1 },
-    { name: "third", maxCount: 1 },
-  ]),
+  upload.single("logo"),
   createTeam
 );
 router.put("/verify-payment", protect, authorize("superadmin"), verifyPayment);

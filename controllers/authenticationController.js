@@ -88,7 +88,8 @@ export const getUserInfo = async (req, res) => {
 
 export const updateAdmin = async (req, res) => {
   const { email, name, password } = req.body;
-  console.log(req.body)
+  const file = req.file;
+  const fileName =file? file.filename:"";
   try {
     let user = await User.findById(req.user.id).select('-password -__v -resetPasswordLink');
     console.log(user);
@@ -98,6 +99,10 @@ export const updateAdmin = async (req, res) => {
     }
 
     const updateData = { name, email };
+    if (fileName != "") {
+      updateData.avatar=fileName
+    }
+    
     if (password && password.trim() !== '') {
       const hashedPassword = await hash(password, 10);
       updateData.password = hashedPassword;

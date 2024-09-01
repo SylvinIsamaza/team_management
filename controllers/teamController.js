@@ -10,13 +10,14 @@ export const createTeam = async (req, res, next) => {
   
   const data =
     req.body;
-  console.log(req.body)
+  
   
   try {
     const newTeam = new Team(data);
-    if (req.files&&req.files.home) newTeam.jerseys.home = req.files.home[0].path;
-    if (req.files&&req.files.away) newTeam.jerseys.away = req.files.away[0].path;
-    if (req.files&&req.files.third) newTeam.jerseys.third = req.files.third[0].path;
+    const file = req.file;
+    const fileName = file ? file.filename : "";
+    newTeam.logo = fileName
+    
     await newTeam.save();
     res.status(201).json({success:true,team: newTeam });
   } catch (error) {
@@ -217,8 +218,20 @@ export const updateTeam = async (req, res, next) => {
 }
 export const getAllTeams = async (req, res,next) => {
   try {
-    const teams = await Team.find()
-    res.status(200).json({success:true,teams: teams });
+    const teams = await Team.find().select("-__v  -createdAt -updatedAt -paymentReceipt")
+    const updatedTeams = await Promise.all(
+      teams.map(async (team) => {
+         
+          const manager = await User.findById(team.managerId).select("-__v  -createdAt -updatedAt ");
+          
+          return {
+              ...team._doc, 
+              manager,            
+          };
+      })
+  );
+    
+    res.status(200).json({success:true,teams: updatedTeams });
   } catch (error) {
     next(error)
   }

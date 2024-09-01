@@ -5,19 +5,23 @@ import User from '../models/user.js';
 // Create a new official
 export const createOfficial = async (req, res) => {
     try {
+        const file = req.file;
+        console.log(file)
+        const fileName = file.filename
+        console.log(fileName)
         const official = new Officials(req.body);
+        official.avatar = fileName;
         await official.save();
-        res.status(201).json({ success: true, data: official });
+        res.status(201).json({ success: true, official: official });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
 };
 
-// Get all officials
 export const getAllOfficials = async (req, res) => {
     try {
         const officials = await Officials.find().populate('teamID');
-        res.status(200).json({ success: true, data: officials });
+        res.status(200).json({ success: true, officials: officials });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
@@ -35,8 +39,6 @@ export const getOfficialById = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
-
-// Update an official by ID
 export const updateOfficial = async (req, res) => {
     try {
         const official = await Officials.findByIdAndUpdate(req.params.id, req.body, { new: true });

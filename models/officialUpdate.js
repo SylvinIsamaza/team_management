@@ -11,8 +11,11 @@ const officialUpdateSchema = new mongoose.Schema({
   date: {
     type: Date,
     default:Date.now
+  },
+  publishedBy: {
+    type: String,
+    enum:["Admin","Manager"]
   }
- 
   
 },{timestamps:true});
 

@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const officialsSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
+  name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  phone: { type: String, required: true },
+  contact: { type: String, required: true },
   description: { type: String },
   teamID: { type: mongoose.Schema.Types.ObjectId, ref: "team" },
   position: {
@@ -41,12 +41,19 @@ const officialsSchema = new mongoose.Schema({
     type: Number,
 
   },
+  joinDate: {
+    type: Date,
+    default:Date.now
+  },
   preferredFoot: { type: String },
   dateOfBirth: { type: Date },
   nationality: { type: String },
+  avatar: {
+    type:String
+  },
   status: {
     type: String,
-    enum:["Good Performance","Injury"]
+    enum:["Pending","Completed"]
   }
  
 }, { timestamps: true });

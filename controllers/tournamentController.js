@@ -4,8 +4,9 @@ import Match from "../models/match.js";
 import MatchStatistics from "../models/matchStatistics.js";
 
 export async function createTournament(req, res, next) {
+  console.log(req)
   const { name, type, startDate, endDate, sponsors, teams,status } = req.body;
-
+   
   try {
     const newTournament = new Tournament({
       name,
@@ -16,13 +17,13 @@ export async function createTournament(req, res, next) {
       teams,
       sponsors,
     });
-    newTournament.recordedBy = req.user.id;
     await newTournament.save();
     res.status(201).json({
       success: true,
       data: newTournament,
     });
   } catch (error) {
+    console.log(error)
     next(error);
   }
 }
