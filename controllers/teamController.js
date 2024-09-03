@@ -6,6 +6,64 @@ import Officials from "../models/officials.js";
 import Squad from "../models/squad.js";
 import Transfer from "../models/transfer.js";
 
+import TournamentStandings from '../models/tournamentStanding.js';
+import Match from '../models/match.js';
+import MatchStatistics from '../models/matchStatistics.js'; 
+export async function getTeamAnalytics(req, res, next) {
+  const { teamId } = req.params;
+
+  try {
+   
+    const currentSeason = 'current_season_id'; // Replace with actual logic to get the current season ID
+
+    
+    const standings = await TournamentStandings.findOne({ teamId, season: currentSeason })
+      .populate('tournamentId')
+      .populate('teamId')
+      .populate('season');
+
+    
+    const upcomingMatches = await Match.find({
+      $or: [{ homeTeamId: teamId }, { awayTeamId: teamId }],
+      dateTime: { $gte: new Date() } 
+    })
+      .sort({ dateTime: 1 }) 
+      .limit(5)
+      .populate('homeTeamId')
+      .populate('awayTeamId');
+
+   
+    const matchStats = await MatchStatistics.find({
+      $or: [{ 'goals.teamId': teamId }, { 'assists.teamId': teamId }, { 'yellowCards.teamId': teamId }, { 'redCards.teamId': teamId }]
+    }).populate('matchId');
+
+    const totalMatches = matchStats.length;
+    const wins = matchStats.filter(stat => stat.goals.some(goal => goal.teamId.equals(teamId))).length; // Simplified example
+    const draws = matchStats.filter(stat => stat.goals.length === 0).length; 
+    const losses = totalMatches - (wins + draws);
+
+    const winPercentage = totalMatches > 0 ? (wins / totalMatches) * 100 : 0;
+    const drawPercentage = totalMatches > 0 ? (draws / totalMatches) * 100 : 0;
+    const lossPercentage = totalMatches > 0 ? (losses / totalMatches) * 100 : 0;
+
+    res.status(200).json({
+      standings,
+      next5Matches: upcomingMatches,
+      performance: {
+        totalMatches,
+        wins,
+        draws,
+        losses,
+        winPercentage,
+        drawPercentage,
+        lossPercentage
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const createTeam = async (req, res, next) => {
   
   const data =
@@ -283,3 +341,4 @@ export const verifyPayment = async (req, res,next) => {
     next(error)
   }
 };
+

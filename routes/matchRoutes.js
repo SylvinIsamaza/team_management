@@ -1,31 +1,18 @@
-const express = require("express");
-const {
+import express from 'express';
+import {
   createMatch,
-  updateMatchScore,
-  recordMatchStatistics,
-  getMatchStatistics,
-} = require("../controllers/matchController");
-const { protect, authorize } = require("../middleware/authMiddleware");
+  getAllMatches,
+  getMatchById,
+  updateMatch,
+  deleteMatch
+} from '../controllers/matchController.js'; 
 
 const router = express.Router();
-router.post("/", protect, authorize("superAdmin"), createMatch);
-router.put(
-  "/update-score",
-  protect,
-  authorize("superAdmin", "manager"),
-  updateMatchScore
-);
-router.post(
-  "/statistics",
-  protect,
-  authorize("manager"),
-  recordMatchStatistics
-);
-router.get(
-  "/statistics/:matchId",
-  protect,
-  authorize("manager", "superAdmin"),
-  getMatchStatistics
-);
+
+router.post('/new', createMatch);
+router.get('/', getAllMatches);
+router.get('/:id', getMatchById);
+router.put('/:id', updateMatch);
+router.delete('/:id', deleteMatch);
 
 export default router;

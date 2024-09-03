@@ -3,14 +3,15 @@ import {
   createTournament,
   addTeamToTournament,
   allocateTeamsToGroups,
-  createKnockoutStages,
-  updateMatchData,
+  // updateMatchData,
   getTournamentDetails,
   getAllTournaments,
   updateTournament,
   deleteTournamentById,
+  
 } from "../controllers/tournamentController.js";
 import { protect, authorize } from "../middlewares/authMiddleware.js";
+import { createTournamentMatches, deleteAllMatchesInTournament, getMatchesByTournament } from "../controllers/matchController.js";
 
 const router = express.Router();
 
@@ -28,20 +29,23 @@ router.post(
   allocateTeamsToGroups
 );
 router.post(
-  "/create-knockout-stages",
-  protect,
-  authorize("superadmin"),
-  createKnockoutStages
+  "/:tournamentId/matches",
+  // protect,
+  // authorize("superadmin"),
+  createTournamentMatches
 );
 router.get("/", getAllTournaments);
-router.put(
-  "/update-match-data",
-  protect,
-  authorize("superadmin"),
-  updateMatchData
-);
+// router.put(
+//   "/update-match-data",
+//   protect,
+//   authorize("superadmin"),
+//   updateMatchData
+// );
 router.get("/:id", getTournamentDetails);
 router.put("/:id", protect, authorize("superadmin"), updateTournament);
-router.delete("/:id",protect,authorize("superadmin"), deleteTournamentById);
+router.delete("/:id", protect, authorize("superadmin"), deleteTournamentById);
+router.get('/:tournamentId/matches', getMatchesByTournament);
+router.delete("/:tournamentId/matches",deleteAllMatchesInTournament)
+
 
 export default router;

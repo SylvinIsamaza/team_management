@@ -29,6 +29,14 @@ const matchSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  isPostponed: {
+    type: String,
+    default:false
+  },
+  newDate: {
+    type: Date,
+    default:Date.now()
+  }
 });
 
 const Match = mongoose.model("Match", matchSchema);

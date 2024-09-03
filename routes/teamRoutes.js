@@ -13,12 +13,13 @@ import {
   getAllTeams,
   deleteTeam,
   updateTeam,
+  getTeamAnalytics,
 } from "../controllers/teamController.js";
 import { protect, authorize } from "../middlewares/authMiddleware.js";
 import upload from "../middlewares/multerMiddleWare.js";
 
 const router = express.Router();
-
+router.get('/:teamId/analytic', getTeamAnalytics); 
 router.post(
   "/upload-jerseys",
   protect,

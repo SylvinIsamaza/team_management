@@ -85,44 +85,74 @@ export const allocateTeamsToGroups = async (req, res, next) => {
   }
 };
 
-// Create knockout stages
-export const createKnockoutStages = async (req, res, next) => {
-  const { tournamentId, knockoutStages } = req.body; // knockoutStages is an array of objects { stageName, matches }
+ const createKnockoutMatches = async (tournamentId) => {
+ 
+  const tournament = await Tournament.findById(tournamentId).populate('teams');
 
-  try {
-    const tournament = await Tournament.findById(tournamentId);
-    if (!tournament)
-      return res.status(404).json({ message: "Tournament not found" });
-
-    tournament.knockoutStages = knockoutStages;
-    await tournament.save();
-
-    res.status(200).json(tournament);
-  } catch (error) {
-    next(error);
+  if (!tournament || tournament.type !== 'Knockout') {
+    throw new Error('Invalid tournament or tournament type is not Knockout');
   }
+
+  const teams = tournament.teams;
+  if (teams.length % 2 !== 0) {
+    throw new Error('Knockout tournaments require an even number of teams');
+  }
+
+  const matches = [];
+  for (let i = 0; i < teams.length; i += 2) {
+    const match = new Match({
+      homeTeamId: teams[i],
+      awayTeamId: teams[i + 1],
+      tournamentId,
+      dateTime: new Date(), 
+      venue: 'Default Venue',
+      status: 'UPCOMING',
+      homeTeamScore: 0,
+      awayTeamScore: 0,
+      startDate: new Date(),
+    });
+    matches.push(match);
+  }
+
+ 
+  await Match.insertMany(matches);
+  return matches;
 };
 
-export const updateMatchData = async (req, res, next) => {
-  const { matchId, homeTeamScore, awayTeamScore, statistics } = req.body;
+ const createLeagueMatches = async (tournamentId) => {
+  const tournament = await Tournament.findById(tournamentId).populate('teams');
 
-  try {
-    const match = await Match.findById(matchId);
-    if (!match) return res.status(404).json({ message: "Match not found" });
-
-    match.homeTeamScore = homeTeamScore;
-    match.awayTeamScore = awayTeamScore;
-    await match.save();
-
-    // Record match statistics
-    const matchStatistics = new MatchStatistics({ matchId, ...statistics });
-    await matchStatistics.save();
-
-    res.status(200).json({ match, matchStatistics });
-  } catch (error) {
-    next(error);
+  if (!tournament || tournament.type !== 'League') {
+    throw new Error('Invalid tournament or tournament type is not League');
   }
+
+  const teams = tournament.teams;
+  const matches = [];
+
+  
+  for (let i = 0; i < teams.length; i++) {
+    for (let j = i + 1; j < teams.length; j++) {
+      const match = new Match({
+        homeTeamId: teams[i],
+        awayTeamId: teams[j],
+        tournamentId,
+        dateTime: new Date(), 
+        venue: 'Default Venue', 
+        status: 'UPCOMING',
+        homeTeamScore: 0,
+        awayTeamScore: 0,
+        startDate: new Date(),
+      });
+      matches.push(match);
+    }
+  }
+  await Match.insertMany(matches);
+  return matches;
 };
+
+
+
+
 
 export const getAllTournaments = async (req, res, next) => {
   try {

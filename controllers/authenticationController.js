@@ -64,7 +64,7 @@ export const login = async (req, res) => {
     const token = Jwt.sign({ id: user._id,role:user.role }, process.env.JWT_SECRET, {
       expiresIn: '1d',
     });
-    res.cookie("token",token,{ secure: true,httpOnly: true, maxAge: 36000000 })
+    res.cookie("token",token,{ secure: true,httpOnly: true, maxAge: 3600000090 })
     res.status(200).json({success:true, token,user:user, role:user.role });
   } catch (error) {
     console.log(error)

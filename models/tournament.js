@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 const tournamentSchema = new mongoose.Schema(
   {
+    season: {
+      type: mongoose.Schema.Types.ObjectId,
+      required:true
+    },
     name: {
       type: String,
       required: true,
@@ -33,7 +37,6 @@ const tournamentSchema = new mongoose.Schema(
     }],
     sponsors: { type: String},
     teams: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Team' }],
-
     recordedBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     teams: [
       {

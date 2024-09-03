@@ -17,6 +17,7 @@ import managerRoutes from "./routes/managerRoutes.js";
 import newsRoutes from "./routes/newsRoutes.js";
 import transferRoute from "./routes/transferRoutes.js";
 import TournamentRoutes from "./routes/tournamentRoutes.js";
+import MatchRoutes from "./routes/matchRoutes.js"
 import cookieParser from "cookie-parser";
 
 
@@ -42,6 +43,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use("/api/admin", superAdminRoutes);
 app.use("/api/team", teamRoutes);
 app.use("/api/auth", AuthRoutes);
+app.use("/api/matches", MatchRoutes);
 app.use("/api/transfer", transferRoute);
 app.use("/api/manager", managerRoutes);
 app.use("/api/news", newsRoutes);
