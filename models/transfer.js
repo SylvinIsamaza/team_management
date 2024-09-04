@@ -2,19 +2,19 @@ import mongoose from "mongoose";
 
 const transferSchema = new mongoose.Schema(
   {
-    playerID: {
+    player: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "officials",
       required: true,
     },
-    fromTeamID: {
+    fromTeam: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Team",
+      ref: "team",
       required: true,
     },
-    toTeamID: {
+    toTeam: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Team",
+      ref: "team",
       required: true,
     },
     transferDate: { type: Date, default: Date.now },

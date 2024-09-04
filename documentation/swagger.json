@@ -440,7 +440,7 @@
       "get": {
         "summary": "Get team details",
         "tags": ["Team"],
-        
+
         "responses": {
           "200": {
             "description": "Team Manager retrieved successfully",
@@ -1034,7 +1034,7 @@
             "items": {
               "type": "object",
               "properties": {
-                "tournamentId": {
+                "tournament": {
                   "type": "string",
                   "description": "ID of the tournament"
                 },
@@ -1048,7 +1048,7 @@
                   }
                 }
               },
-              "required": ["tournamentId", "member"]
+              "required": ["tournament", "member"]
             }
           }
         }
@@ -1214,7 +1214,7 @@
       "AddTeamsToTournamentRequest": {
         "type": "object",
         "properties": {
-          "tournamentId": {
+          "tournament": {
             "type": "string",
             "description": "ID of the tournament"
           },
@@ -1230,7 +1230,7 @@
       "AllocateTeamsToGroupsRequest": {
         "type": "object",
         "properties": {
-          "tournamentId": {
+          "tournament": {
             "type": "string",
             "description": "ID of the tournament"
           },
@@ -1258,7 +1258,7 @@
       "CreateKnockoutStagesRequest": {
         "type": "object",
         "properties": {
-          "tournamentId": {
+          "tournament": {
             "type": "string",
             "description": "ID of the tournament"
           },

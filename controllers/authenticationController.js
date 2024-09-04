@@ -51,7 +51,7 @@ export const login = async (req, res) => {
 
     let user;
    
-    user = await User.findOne({ email }).select('-resetPasswordLink -__v');
+    user = await User.findOne({ email }).select('-resetPasswordLink -__v').populate("team");
     console.log(user)
     if (!user) {
       return res.status(401).json({success:false, message: 'Invalid Email or password' });
@@ -73,7 +73,7 @@ export const login = async (req, res) => {
 };
 export const getUserInfo = async (req, res) => {
   try {
-    let user = await User.findById(req.user.id).select('-password -__v -resetPasswordLink');
+    let user = await User.findById(req.user.id).select('-password -__v -resetPasswordLink').populate("team");
     
     if (!user) {
       return res.status(401).json({success:true, message: 'Not authorized' });

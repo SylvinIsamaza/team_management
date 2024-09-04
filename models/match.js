@@ -1,19 +1,19 @@
 import mongoose from "mongoose";
 
 const matchSchema = new mongoose.Schema({
-  homeTeamId: {
+  homeTeam: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Team",
+    ref: "team",
     required: true,
   },
-  awayTeamId: {
+  awayTeam: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Team",
+    ref: "team",
     required: true,
   },
-  tournamentId: {
+  tournament: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Tournament",
+    ref: "tournament",
     required: true,
   },
   dateTime: { type: Date, required: true },
@@ -31,12 +31,12 @@ const matchSchema = new mongoose.Schema({
   },
   isPostponed: {
     type: String,
-    default:false
+    default: false,
   },
   newDate: {
     type: Date,
-    default:Date.now()
-  }
+    default: Date.now(),
+  },
 });
 
 const Match = mongoose.model("Match", matchSchema);

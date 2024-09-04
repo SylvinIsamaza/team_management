@@ -1,7 +1,7 @@
 import Transfer from "../models/transfer.js"
 export const getAllTransfer = async (req, res, next) => {
   try {
-      const transfer = await Transfer.find().select("-__v  -createdAt -updatedAt");
+      const transfer = await Transfer.find().select("-__v  -createdAt -updatedAt").populate("toTeam").populate("fromTeam").populate("player");
       res.json({success:true,transfer});
   } catch (error) {
       next(error);
@@ -11,6 +11,7 @@ export const getAllTransfer = async (req, res, next) => {
 export const newTransfer = async (req, res, next) => {
   try {
     const transfer = new Transfer(req.body);
+    await transfer.save()
     
     res.json({success:true,transfer});
 } catch (error) {

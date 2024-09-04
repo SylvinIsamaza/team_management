@@ -23,11 +23,21 @@ const teamSchema = new mongoose.Schema(
     stadium: {
       type:String
     },
-    jerseys: {
-      home: String,
-      away: String,
-      third: String
-    },
+    jerseys: [{
+      home: {
+       type:String
+      } ,
+      away: {
+        type:String
+       } ,
+       third: {
+         type: String,
+         
+      },
+      goalKeeper: {
+         type:String
+       }
+    }],
     paymentVerified: {
       type:Boolean
     },

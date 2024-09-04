@@ -31,9 +31,9 @@ const userSchema = new Schema(
     password: {
       type: String,
     },
-    teamID: {
+    team: {
       type: mongoose.Schema.Types.ObjectId,
-      ref:"Team"
+      ref:"team"
     }
   },
   { timestamps: true }

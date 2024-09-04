@@ -1,16 +1,28 @@
 import mongoose from "mongoose";
 
 const tournamentStandingsSchema = new mongoose.Schema({
-  tournamentId: {
+  tournament: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Tournament",
+    ref: "tournament",
     required: true,
   },
-  teamId: { type: mongoose.Schema.Types.ObjectId, ref: "Team", required: true },
-  season: {
+  team: { type: mongoose.Schema.Types.ObjectId, ref: "team", required: true },
+  seasonId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "season",
+    ref: "Season",
     required: true,
+  },
+  yellowCards: {
+    type: Number,
+    default: 0,
+  },
+  cleansheet: {
+    type: Number,
+    default: 0,
+  },
+  redCards: {
+    type: Number,
+    default: 0,
   },
   playedMatches: { type: Number, required: true },
   wonMatches: { type: Number, required: true },
@@ -23,7 +35,7 @@ const tournamentStandingsSchema = new mongoose.Schema({
 });
 
 const TournamentStandings = mongoose.model(
-  "TournamentStandings",
+  "Standing",
   tournamentStandingsSchema
 );
 export default TournamentStandings;

@@ -5,7 +5,7 @@ const officialsSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   contact: { type: String, required: true },
   description: { type: String },
-  teamID: { type: mongoose.Schema.Types.ObjectId, ref: "team" },
+  team: { type: mongoose.Schema.Types.ObjectId, ref: "team" },
   position: {
     type: String, required: true, enum: [
       "Owners",
@@ -53,7 +53,7 @@ const officialsSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum:["Pending","Completed"]
+    enum:["Health","Injury", "Other"]
   }
  
 }, { timestamps: true });

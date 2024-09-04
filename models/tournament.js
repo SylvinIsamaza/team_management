@@ -3,7 +3,8 @@ const tournamentSchema = new mongoose.Schema(
   {
     season: {
       type: mongoose.Schema.Types.ObjectId,
-      required:true
+      required: true,
+      ref:"season"
     },
     name: {
       type: String,

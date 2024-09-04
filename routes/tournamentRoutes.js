@@ -8,10 +8,13 @@ import {
   getAllTournaments,
   updateTournament,
   deleteTournamentById,
-  
 } from "../controllers/tournamentController.js";
 import { protect, authorize } from "../middlewares/authMiddleware.js";
-import { createTournamentMatches, deleteAllMatchesInTournament, getMatchesByTournament } from "../controllers/matchController.js";
+import {
+  createTournamentMatches,
+  deleteAllMatchesInTournament,
+  getMatchesByTournament,
+} from "../controllers/matchController.js";
 
 const router = express.Router();
 
@@ -29,7 +32,7 @@ router.post(
   allocateTeamsToGroups
 );
 router.post(
-  "/:tournamentId/matches",
+  "/:tId/matches",
   // protect,
   // authorize("superadmin"),
   createTournamentMatches
@@ -44,8 +47,7 @@ router.get("/", getAllTournaments);
 router.get("/:id", getTournamentDetails);
 router.put("/:id", protect, authorize("superadmin"), updateTournament);
 router.delete("/:id", protect, authorize("superadmin"), deleteTournamentById);
-router.get('/:tournamentId/matches', getMatchesByTournament);
-router.delete("/:tournamentId/matches",deleteAllMatchesInTournament)
-
+router.get("/:tournament/matches", getMatchesByTournament);
+router.delete("/:tournament/matches", deleteAllMatchesInTournament);
 
 export default router;

@@ -18,6 +18,11 @@ import newsRoutes from "./routes/newsRoutes.js";
 import transferRoute from "./routes/transferRoutes.js";
 import TournamentRoutes from "./routes/tournamentRoutes.js";
 import MatchRoutes from "./routes/matchRoutes.js"
+import FavoriteRoutes from "./routes/favoriteRoutes.js"
+import SquadRoutes from "./routes/squadRoutes.js"
+import StandingRoutes from "./routes/standingRoutes.js"
+import SeasonRoutes from './routes/seasonRoutes.js';
+
 import cookieParser from "cookie-parser";
 
 
@@ -49,6 +54,12 @@ app.use("/api/manager", managerRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api/officials", officialRoutes);
 app.use("/api/tournament", TournamentRoutes);
+app.use("/api/favorites", FavoriteRoutes)
+app.use("/api/squads", SquadRoutes)
+app.use("/api/standings", StandingRoutes)
+app.use('/api/seasons', SeasonRoutes);
+
+
 app.use(errorHandler);
 const port = process.env.PORT || 5000;
 app.listen(port, async () => {

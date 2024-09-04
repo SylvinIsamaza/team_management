@@ -20,7 +20,7 @@ export const createOfficial = async (req, res) => {
 
 export const getAllOfficials = async (req, res) => {
     try {
-        const officials = await Officials.find().populate('teamID');
+        const officials = await Officials.find().populate('team');
         res.status(200).json({ success: true, officials: officials });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -30,7 +30,7 @@ export const getAllOfficials = async (req, res) => {
 // Get an official by ID
 export const getOfficialById = async (req, res) => {
     try {
-        const official = await Officials.findById(req.params.id).populate('teamID');
+        const official = await Officials.findById(req.params.id).populate('team');
         if (!official) {
             return res.status(404).json({ success: false, message: 'Official not found' });
         }
